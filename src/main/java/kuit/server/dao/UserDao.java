@@ -39,4 +39,12 @@ public class UserDao {
         Map<String, Object> param = Map.of("nickname", nickname);
         return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, param, boolean.class));
     }
+
+    public int updateNickname(long userId, String nickname){
+        String sql = "update user set nickname=:nickname where id=:id";
+        Map<String, Object> param = Map.of(
+                "nickname", nickname,
+                "id", userId);
+        return jdbcTemplate.update(sql, param);
+    }
 }

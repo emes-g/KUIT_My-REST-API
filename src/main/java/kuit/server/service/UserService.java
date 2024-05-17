@@ -1,5 +1,6 @@
 package kuit.server.service;
 
+import kuit.server.common.exception.DatabaseException;
 import kuit.server.common.exception.UserException;
 import kuit.server.dao.UserDao;
 import kuit.server.dto.user.PostUserRequest;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import static kuit.server.common.status.BaseExceptionResponseStatus.DATABASE_ERROR;
 import static kuit.server.common.status.BaseExceptionResponseStatus.DUPLICATE_NICKNAME;
 
 @Slf4j
@@ -32,6 +34,16 @@ public class UserService {
     public void validateNickname(String nickname) {
         if (userDao.hasDuplicateNickName(nickname)) {
             throw new UserException(DUPLICATE_NICKNAME);
+        }
+    }
+
+    public void updateNickname(long userId, String nickname) {
+        log.info("[UserService.updateNickname]");
+
+        validateNickname(nickname);
+        int affectedRows = userDao.updateNickname(userId, nickname);
+        if (affectedRows != 1) {
+            throw new DatabaseException(DATABASE_ERROR);
         }
     }
 }
