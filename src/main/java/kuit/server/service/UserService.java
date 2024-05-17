@@ -3,11 +3,14 @@ package kuit.server.service;
 import kuit.server.common.exception.DatabaseException;
 import kuit.server.common.exception.UserException;
 import kuit.server.dao.UserDao;
+import kuit.server.dto.user.GetUserResponse;
 import kuit.server.dto.user.PostUserRequest;
 import kuit.server.dto.user.PostUserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static kuit.server.common.status.BaseExceptionResponseStatus.DATABASE_ERROR;
 import static kuit.server.common.status.BaseExceptionResponseStatus.DUPLICATE_NICKNAME;
@@ -72,5 +75,10 @@ public class UserService {
         if (affectedRows != 1) {
             throw new DatabaseException(DATABASE_ERROR);
         }
+    }
+
+    public List<GetUserResponse> getUsers() {
+        log.info("[UserService.getUsers]");
+        return userDao.getUsers();
     }
 }

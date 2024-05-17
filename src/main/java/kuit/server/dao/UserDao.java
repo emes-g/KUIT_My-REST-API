@@ -1,5 +1,6 @@
 package kuit.server.dao;
 
+import kuit.server.dto.user.GetUserResponse;
 import kuit.server.dto.user.PostUserRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -10,6 +11,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -72,5 +74,16 @@ public class UserDao {
                 "status", status,
                 "id", userId);
         return jdbcTemplate.update(sql, param);
+    }
+
+    public List<GetUserResponse> getUsers() {
+        String sql = "select nickname, phone_number, status from user";
+
+        return jdbcTemplate.query(sql,
+                (rs, rowNum) -> new GetUserResponse(
+                        rs.getString("nickname"),
+                        rs.getString("phone_number"),
+                        rs.getString("status"))
+        );
     }
 }

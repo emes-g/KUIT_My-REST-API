@@ -11,6 +11,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+import static kuit.server.common.status.BaseExceptionResponseStatus.INVALID_USER_STATUS;
 import static kuit.server.common.status.BaseExceptionResponseStatus.INVALID_USER_VALUE;
 import static kuit.server.util.BindingResultUtils.getErrorMessages;
 
@@ -77,5 +80,16 @@ public class UserController {
         }
         userService.updateUserAllInfo(userId, putUserInfoRequest.getNickname(), putUserInfoRequest.getPhoneNumber(), putUserInfoRequest.getStatus());
         return new BaseResponse<>(null);
+    }
+
+    @GetMapping("")
+    public BaseResponse<List<GetUserResponse>> getUsers(
+            @RequestParam(required = false, defaultValue = "") String nickname,
+            @RequestParam(required = false, defaultValue = "ACTIVE") String status) {
+        log.info("[UserController.getUsers]");
+        if (!status.equals("ACTIVE") && !status.equals("INACTIVE")) {
+            throw new UserException(INVALID_USER_STATUS);
+        }
+        return new BaseResponse<>(userService.getUsers());
     }
 }
