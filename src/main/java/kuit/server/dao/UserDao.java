@@ -47,4 +47,12 @@ public class UserDao {
                 "id", userId);
         return jdbcTemplate.update(sql, param);
     }
+
+    public int updatePhoneNumber(long userId, String phoneNumber){
+        String sql = "update user set phone_number=:phone_number where id=:id";
+        Map<String, Object> param = Map.of(
+                "phone_number", phoneNumber,
+                "id", userId);
+        return jdbcTemplate.update(sql, param);
+    }
 }

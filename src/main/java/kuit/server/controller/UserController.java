@@ -3,6 +3,7 @@ package kuit.server.controller;
 import kuit.server.common.BaseResponse;
 import kuit.server.common.exception.UserException;
 import kuit.server.dto.user.PatchNicknameRequest;
+import kuit.server.dto.user.PatchPhoneNumberRequest;
 import kuit.server.dto.user.PostUserRequest;
 import kuit.server.dto.user.PostUserResponse;
 import kuit.server.service.UserService;
@@ -38,13 +39,24 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}/nickname")
-    public BaseResponse<String> modifyNickname(@PathVariable long userId,
+    public BaseResponse<String> updateNickname(@PathVariable long userId,
                                                @Validated @RequestBody PatchNicknameRequest patchNicknameRequest, BindingResult bindingResult) {
-        log.info("[UserController.modifyNickname]");
+        log.info("[UserController.updateNickname]");
         if (bindingResult.hasErrors()) {
             throw new UserException(INVALID_USER_VALUE, getErrorMessages(bindingResult));
         }
         userService.updateNickname(userId, patchNicknameRequest.getNickname());
+        return new BaseResponse<>(null);
+    }
+
+    @PatchMapping("/{userId}/phoneNumber")
+    public BaseResponse<String> updatePhoneNumber(@PathVariable long userId,
+                                                  @Validated @RequestBody PatchPhoneNumberRequest patchPhoneNumberRequest, BindingResult bindingResult) {
+        log.info("[UserController.updatePhoneNumber]");
+        if (bindingResult.hasErrors()) {
+            throw new UserException(INVALID_USER_VALUE, getErrorMessages(bindingResult));
+        }
+        userService.updatePhoneNumber(userId, patchPhoneNumberRequest.getPhoneNumber());
         return new BaseResponse<>(null);
     }
 }
