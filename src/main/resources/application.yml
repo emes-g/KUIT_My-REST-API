@@ -1,0 +1,51 @@
+spring:
+  profiles:
+    group:
+      "local": "localDB, devPort, web-mvc"
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "localDB"
+
+  datasource:
+    url: ${DATASOURCE_URL_LOCAL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    dbcp2:
+      validation-query: select 1
+  sql:
+    init:
+      platform: mysql
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "devPort"
+
+server:
+  port: 9000
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "web-mvc"
+
+  web:
+    resources:
+      add-mappings: false
+
+  messages:
+    basename: errors
+
+
+
+
+
