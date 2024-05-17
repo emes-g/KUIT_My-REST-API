@@ -40,7 +40,7 @@ public class UserDao {
         return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, param, boolean.class));
     }
 
-    public int updateNickname(long userId, String nickname){
+    public int updateNickname(long userId, String nickname) {
         String sql = "update user set nickname=:nickname where id=:id";
         Map<String, Object> param = Map.of(
                 "nickname", nickname,
@@ -48,7 +48,7 @@ public class UserDao {
         return jdbcTemplate.update(sql, param);
     }
 
-    public int updatePhoneNumber(long userId, String phoneNumber){
+    public int updatePhoneNumber(long userId, String phoneNumber) {
         String sql = "update user set phone_number=:phone_number where id=:id";
         Map<String, Object> param = Map.of(
                 "phone_number", phoneNumber,
@@ -56,9 +56,19 @@ public class UserDao {
         return jdbcTemplate.update(sql, param);
     }
 
-    public int updateStatus(long userId, String status){
+    public int updateStatus(long userId, String status) {
         String sql = "update user set status=:status where id=:id";
         Map<String, Object> param = Map.of(
+                "status", status,
+                "id", userId);
+        return jdbcTemplate.update(sql, param);
+    }
+
+    public int updateUserAllInfo(long userId, String nickname, String phoneNumber, String status) {
+        String sql = "update user set nickname=:nickname, phone_number=:phone_number, status=:status where id=:id";
+        Map<String, Object> param = Map.of(
+                "nickname", nickname,
+                "phone_number", phoneNumber,
                 "status", status,
                 "id", userId);
         return jdbcTemplate.update(sql, param);

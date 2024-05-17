@@ -67,4 +67,15 @@ public class UserController {
         userService.updateStatus(userId, patchStatusRequest.getStatus());
         return new BaseResponse<>(null);
     }
+
+    @PutMapping("/{userId}")
+    public BaseResponse<String> updateUserAllInfo(@PathVariable long userId,
+                                                  @Validated @RequestBody PutUserInfoRequest putUserInfoRequest, BindingResult bindingResult) {
+        log.info("[UserController.updateUserAllInfo]");
+        if (bindingResult.hasErrors()) {
+            throw new UserException(INVALID_USER_VALUE, getErrorMessages(bindingResult));
+        }
+        userService.updateUserAllInfo(userId, putUserInfoRequest.getNickname(), putUserInfoRequest.getPhoneNumber(), putUserInfoRequest.getStatus());
+        return new BaseResponse<>(null);
+    }
 }

@@ -64,4 +64,13 @@ public class UserService {
             throw new DatabaseException(DATABASE_ERROR);
         }
     }
+
+    public void updateUserAllInfo(long userId, String nickname, String phoneNumber, String status) {
+        log.info("[UserService.updateUserAllInfo]");
+
+        int affectedRows = userDao.updateUserAllInfo(userId, nickname, phoneNumber, status);
+        if (affectedRows != 1) {
+            throw new DatabaseException(DATABASE_ERROR);
+        }
+    }
 }
