@@ -55,4 +55,13 @@ public class UserService {
             throw new DatabaseException(DATABASE_ERROR);
         }
     }
+
+    public void updateStatus(long userId, String status) {
+        log.info("[UserService.updateStatus]");
+
+        int affectedRows = userDao.updateStatus(userId, status);
+        if (affectedRows != 1) {
+            throw new DatabaseException(DATABASE_ERROR);
+        }
+    }
 }

@@ -55,4 +55,12 @@ public class UserDao {
                 "id", userId);
         return jdbcTemplate.update(sql, param);
     }
+
+    public int updateStatus(long userId, String status){
+        String sql = "update user set status=:status where id=:id";
+        Map<String, Object> param = Map.of(
+                "status", status,
+                "id", userId);
+        return jdbcTemplate.update(sql, param);
+    }
 }

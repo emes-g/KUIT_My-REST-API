@@ -2,10 +2,7 @@ package kuit.server.controller;
 
 import kuit.server.common.BaseResponse;
 import kuit.server.common.exception.UserException;
-import kuit.server.dto.user.PatchNicknameRequest;
-import kuit.server.dto.user.PatchPhoneNumberRequest;
-import kuit.server.dto.user.PostUserRequest;
-import kuit.server.dto.user.PostUserResponse;
+import kuit.server.dto.user.*;
 import kuit.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +54,17 @@ public class UserController {
             throw new UserException(INVALID_USER_VALUE, getErrorMessages(bindingResult));
         }
         userService.updatePhoneNumber(userId, patchPhoneNumberRequest.getPhoneNumber());
+        return new BaseResponse<>(null);
+    }
+
+    @PatchMapping("/{userId}/status")
+    public BaseResponse<String> updateStatus(@PathVariable long userId,
+                                             @Validated @RequestBody PatchStatusRequest patchStatusRequest, BindingResult bindingResult) {
+        log.info("[UserController.updateStatus]");
+        if (bindingResult.hasErrors()) {
+            throw new UserException(INVALID_USER_VALUE, getErrorMessages(bindingResult));
+        }
+        userService.updateStatus(userId, patchStatusRequest.getStatus());
         return new BaseResponse<>(null);
     }
 }
