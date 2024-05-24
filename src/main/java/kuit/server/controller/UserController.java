@@ -40,9 +40,10 @@ public class UserController {
 
     /**
      * 회워 닉네임 변경
-     * @param userId 회원 ID
+     *
+     * @param userId               회원 ID
      * @param patchNicknameRequest 닉네임 변경 요청
-     * @param bindingResult Validation 오류 보관 객체
+     * @param bindingResult        Validation 오류 보관 객체
      * @return 예외 혹은 응답
      */
     @PatchMapping("/{userId}/nickname")
@@ -89,12 +90,12 @@ public class UserController {
      */
     @PutMapping("/{userId}")
     public BaseResponse<String> updateUserAllInfo(@PathVariable long userId,
-                                                  @Validated @RequestBody PutUserInfoRequest putUserInfoRequest, BindingResult bindingResult) {
+                                                  @Validated @RequestBody PostUserRequest postUserRequest, BindingResult bindingResult) {
         log.info("[UserController.updateUserAllInfo]");
         if (bindingResult.hasErrors()) {
             throw new UserException(INVALID_USER_VALUE, getErrorMessages(bindingResult));
         }
-        userService.updateUserAllInfo(userId, putUserInfoRequest.getNickname(), putUserInfoRequest.getPhoneNumber(), putUserInfoRequest.getStatus());
+        userService.updateUserAllInfo(userId, postUserRequest);
         return new BaseResponse<>(null);
     }
 

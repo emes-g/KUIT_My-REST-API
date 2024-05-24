@@ -66,12 +66,12 @@ public class UserDao {
         return jdbcTemplate.update(sql, param);
     }
 
-    public int updateUserAllInfo(long userId, String nickname, String phoneNumber, String status) {
+    public int updateUserAllInfo(long userId, PostUserRequest postUserRequest) {
         String sql = "update user set nickname=:nickname, phone_number=:phone_number, status=:status where id=:id";
         Map<String, Object> param = Map.of(
-                "nickname", nickname,
-                "phone_number", phoneNumber,
-                "status", status,
+                "nickname", postUserRequest.getNickname(),
+                "phone_number", postUserRequest.getPhoneNumber(),
+                "status", postUserRequest.getStatus(),
                 "id", userId);
         return jdbcTemplate.update(sql, param);
     }

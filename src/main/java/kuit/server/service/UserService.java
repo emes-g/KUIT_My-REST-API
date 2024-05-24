@@ -82,15 +82,15 @@ public class UserService {
         }
     }
 
-    public void updateUserAllInfo(long userId, String nickname, String phoneNumber, String status) {
+    public void updateUserAllInfo(long userId, PostUserRequest postUserRequest) {
         log.info("[UserService.updateUserAllInfo]");
 
         // TODO: 1. validation
-        validateNickname(nickname);
-        validateStatus(status);
+        validateNickname(postUserRequest.getNickname());
+        validateStatus(postUserRequest.getStatus());
 
         // TODO: 2. 회원 전체 정보 수정
-        int affectedRows = userDao.updateUserAllInfo(userId, nickname, phoneNumber, status);
+        int affectedRows = userDao.updateUserAllInfo(userId, postUserRequest);
         if (affectedRows != 1) {
             throw new DatabaseException(DATABASE_ERROR);
         }
