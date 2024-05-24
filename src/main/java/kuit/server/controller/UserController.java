@@ -103,13 +103,17 @@ public class UserController {
      * 전체 회원 조회
      */
     @GetMapping("")
-    public BaseResponse<List<GetUserResponse>> getUsers(
-            @RequestParam(required = false, defaultValue = "") String nickname,
-            @RequestParam(required = false, defaultValue = "ACTIVE") String status) {
-        log.info("[UserController.getUsers]");
-        if (!status.equals("ACTIVE") && !status.equals("INACTIVE")) {
-            throw new UserException(INVALID_USER_STATUS);
-        }
-        return new BaseResponse<>(userService.getUsers());
+    public BaseResponse<List<GetUserResponse>> getAllUsers() {
+        log.info("[UserController.getAllUsers]");
+        return new BaseResponse<>(userService.getAllUsers());
+    }
+
+    /**
+     * 해당 회원 조회
+     */
+    @GetMapping("/{userId}")
+    public BaseResponse<List<GetUserResponse>> getUserByUserId(@PathVariable long userId){
+        log.info("[UserController.getUser");
+        return new BaseResponse<>(userService.getUserByUserId(userId));
     }
 }

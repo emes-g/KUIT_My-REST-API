@@ -76,7 +76,7 @@ public class UserDao {
         return jdbcTemplate.update(sql, param);
     }
 
-    public List<GetUserResponse> getUsers() {
+    public List<GetUserResponse> getAllUsers() {
         String sql = "select nickname, phone_number, status from user";
 
         return jdbcTemplate.query(sql,
@@ -85,5 +85,23 @@ public class UserDao {
                         rs.getString("phone_number"),
                         rs.getString("status"))
         );
+    }
+
+    public List<GetUserResponse> getUserByUserId(long userId) {
+        String sql = "select nickname, phone_number, status from user where id=:id";
+        Map<String, Object> param = Map.of("id", userId);
+
+        return jdbcTemplate.query(sql, param,
+                (rs, rowNum) -> new GetUserResponse(
+                        rs.getString("nickname"),
+                        rs.getString("phone_number"),
+                        rs.getString("status"))
+        );
+    }
+
+    public boolean isExistedUserId(long userId) {
+        String sql = "select exists(select id from user where id=:id)";
+        Map<String, Object> param = Map.of("id", userId);
+        return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, param, boolean.class));
     }
 }

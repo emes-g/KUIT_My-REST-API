@@ -44,8 +44,9 @@ public class UserService {
         log.info("[UserService.updateNickname]");
 
         // TODO: 1. validation (중복 검사)
+        validateUserId(userId);
         validateNickname(nickname);
-        
+
         // TODO: 2. 회원 닉네임 수정
         int affectedRows = userDao.updateNickname(userId, nickname);
         if (affectedRows != 1) {
@@ -56,7 +57,10 @@ public class UserService {
     public void updatePhoneNumber(long userId, String phoneNumber) {
         log.info("[UserService.updatePhoneNumber]");
 
-        // TODO: 회원 핸드폰 번호 수정
+        // TODO: 1. validation
+        validateUserId(userId);
+
+        // TODO: 2. 회원 핸드폰 번호 수정
         int affectedRows = userDao.updatePhoneNumber(userId, phoneNumber);
         if (affectedRows != 1) {
             throw new DatabaseException(DATABASE_ERROR);
@@ -67,6 +71,7 @@ public class UserService {
         log.info("[UserService.updateStatus]");
 
         // TODO: 1. validation (유효한 문자열 여부 검사)
+        validateUserId(userId);
         validateStatus(status);
 
         // TODO: 2. 회원 상태 수정
@@ -96,10 +101,27 @@ public class UserService {
         }
     }
 
-    public List<GetUserResponse> getUsers() {
-        log.info("[UserService.getUsers]");
+    public List<GetUserResponse> getAllUsers() {
+        log.info("[UserService.getAllUsers]");
 
         // TODO: 전체 회원 조회
-        return userDao.getUsers();
+        return userDao.getAllUsers();
+    }
+
+
+    public List<GetUserResponse> getUserByUserId(long userId) {
+        log.info("[UserService.getUserByUserId");
+
+        // TODO: 1. validation
+        validateUserId(userId);
+
+        // TODO: 2. 회원 조회
+        return userDao.getUserByUserId(userId);
+    }
+
+    public void validateUserId(long userId) {
+        if (!userDao.isExistedUserId(userId)) {
+            throw new UserException(USER_NOT_FOUND);
+        }
     }
 }
