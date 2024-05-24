@@ -37,12 +37,14 @@ public class UserDao {
     }
 
     public boolean hasDuplicateNickName(String nickname) {
+        log.info("[UserDao.hasDuplicateNickName]");
         String sql = "select exists(select nickname from user where nickname=:nickname and status='ACTIVE')";
         Map<String, Object> param = Map.of("nickname", nickname);
         return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, param, boolean.class));
     }
 
     public int updateNickname(long userId, String nickname) {
+        log.info("[UserDao.updateNickname]");
         String sql = "update user set nickname=:nickname where id=:id";
         Map<String, Object> param = Map.of(
                 "nickname", nickname,
@@ -51,6 +53,7 @@ public class UserDao {
     }
 
     public int updatePhoneNumber(long userId, String phoneNumber) {
+        log.info("[UserDao.updatePhoneNumber]");
         String sql = "update user set phone_number=:phone_number where id=:id";
         Map<String, Object> param = Map.of(
                 "phone_number", phoneNumber,
@@ -59,6 +62,7 @@ public class UserDao {
     }
 
     public int updateStatus(long userId, String status) {
+        log.info("[UserDao.updateStatus]");
         String sql = "update user set status=:status where id=:id";
         Map<String, Object> param = Map.of(
                 "status", status,
@@ -67,6 +71,7 @@ public class UserDao {
     }
 
     public int updateUserAllInfo(long userId, PostUserRequest postUserRequest) {
+        log.info("[UserDao.updateUserAllInfo]");
         String sql = "update user set nickname=:nickname, phone_number=:phone_number, status=:status where id=:id";
         Map<String, Object> param = Map.of(
                 "nickname", postUserRequest.getNickname(),
@@ -77,6 +82,7 @@ public class UserDao {
     }
 
     public List<GetUserResponse> getAllUsers() {
+        log.info("[UserDao.getAllUsers]");
         String sql = "select nickname, phone_number, status from user";
 
         return jdbcTemplate.query(sql,
@@ -88,6 +94,7 @@ public class UserDao {
     }
 
     public List<GetUserResponse> getUserByUserId(long userId) {
+        log.info("[UserDao.getUserByUserId]");
         String sql = "select nickname, phone_number, status from user where id=:id";
         Map<String, Object> param = Map.of("id", userId);
 
@@ -100,6 +107,7 @@ public class UserDao {
     }
 
     public boolean isExistedUserId(long userId) {
+        log.info("[UserDao.isExistedUserId]");
         String sql = "select exists(select id from user where id=:id)";
         Map<String, Object> param = Map.of("id", userId);
         return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, param, boolean.class));

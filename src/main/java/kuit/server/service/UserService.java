@@ -35,6 +35,7 @@ public class UserService {
     }
 
     public void validateNickname(String nickname) {
+        log.info("[UserService.validateNickname]");
         if (userDao.hasDuplicateNickName(nickname)) {
             throw new UserException(DUPLICATE_NICKNAME);
         }
@@ -82,6 +83,7 @@ public class UserService {
     }
 
     public void validateStatus(String status) {
+        log.info("[UserService.validateStatus]");
         if (!status.equals("ACTIVE") && !status.equals("INACTIVE")) {
             throw new UserException(INVALID_USER_STATUS);
         }
@@ -91,6 +93,7 @@ public class UserService {
         log.info("[UserService.updateUserAllInfo]");
 
         // TODO: 1. validation
+        validateUserId(userId);
         validateNickname(postUserRequest.getNickname());
         validateStatus(postUserRequest.getStatus());
 
@@ -120,6 +123,7 @@ public class UserService {
     }
 
     public void validateUserId(long userId) {
+        log.info("[UserService.validateUserId]");
         if (!userDao.isExistedUserId(userId)) {
             throw new UserException(USER_NOT_FOUND);
         }
