@@ -38,6 +38,13 @@ public class UserController {
         return new BaseResponse<>(userService.signUp(postUserRequest));
     }
 
+    /**
+     * 회워 닉네임 변경
+     * @param userId 회원 ID
+     * @param patchNicknameRequest 닉네임 변경 요청
+     * @param bindingResult Validation 오류 보관 객체
+     * @return 예외 혹은 응답
+     */
     @PatchMapping("/{userId}/nickname")
     public BaseResponse<String> updateNickname(@PathVariable long userId,
                                                @Validated @RequestBody PatchNicknameRequest patchNicknameRequest, BindingResult bindingResult) {
@@ -49,6 +56,9 @@ public class UserController {
         return new BaseResponse<>(null);
     }
 
+    /**
+     * 회원 핸드폰 번호 수정
+     */
     @PatchMapping("/{userId}/phoneNumber")
     public BaseResponse<String> updatePhoneNumber(@PathVariable long userId,
                                                   @Validated @RequestBody PatchPhoneNumberRequest patchPhoneNumberRequest, BindingResult bindingResult) {
@@ -60,6 +70,9 @@ public class UserController {
         return new BaseResponse<>(null);
     }
 
+    /**
+     * 회원 상태 수정
+     */
     @PatchMapping("/{userId}/status")
     public BaseResponse<String> updateStatus(@PathVariable long userId,
                                              @Validated @RequestBody PatchStatusRequest patchStatusRequest, BindingResult bindingResult) {
@@ -71,6 +84,9 @@ public class UserController {
         return new BaseResponse<>(null);
     }
 
+    /**
+     * 회원 전체 정보 수정
+     */
     @PutMapping("/{userId}")
     public BaseResponse<String> updateUserAllInfo(@PathVariable long userId,
                                                   @Validated @RequestBody PutUserInfoRequest putUserInfoRequest, BindingResult bindingResult) {
@@ -82,6 +98,9 @@ public class UserController {
         return new BaseResponse<>(null);
     }
 
+    /**
+     * 전체 회원 조회
+     */
     @GetMapping("")
     public BaseResponse<List<GetUserResponse>> getUsers(
             @RequestParam(required = false, defaultValue = "") String nickname,
