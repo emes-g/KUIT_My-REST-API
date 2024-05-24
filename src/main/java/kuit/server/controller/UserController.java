@@ -39,7 +39,7 @@ public class UserController {
     }
 
     /**
-     * 회워 닉네임 변경
+     * 회원 닉네임 변경
      *
      * @param userId               회원 ID
      * @param patchNicknameRequest 닉네임 변경 요청
