@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static kuit.server.common.status.BaseExceptionResponseStatus.DATABASE_ERROR;
-import static kuit.server.common.status.BaseExceptionResponseStatus.DUPLICATE_NICKNAME;
+import static kuit.server.common.status.BaseExceptionResponseStatus.*;
 
 @Slf4j
 @Service
@@ -25,8 +24,9 @@ public class UserService {
     public PostUserResponse signUp(PostUserRequest postUserRequest) {
         log.info("[UserService.signUp]");
 
-        // TODO: 1. validation (중복 검사)
+        // TODO: 1. validation
         validateNickname(postUserRequest.getNickname());
+        validateStatus(postUserRequest.getStatus());
 
         // TODO: 2. DB insert & userId 반환
         long userId = userDao.createUser(postUserRequest);
@@ -66,17 +66,30 @@ public class UserService {
     public void updateStatus(long userId, String status) {
         log.info("[UserService.updateStatus]");
 
-        // TODO: 회원 상태 수정
+        // TODO: 1. validation (유효한 문자열 여부 검사)
+        validateStatus(status);
+
+        // TODO: 2. 회원 상태 수정
         int affectedRows = userDao.updateStatus(userId, status);
         if (affectedRows != 1) {
             throw new DatabaseException(DATABASE_ERROR);
         }
     }
 
+    public void validateStatus(String status) {
+        if (!status.equals("ACTIVE") && !status.equals("INACTIVE")) {
+            throw new UserException(INVALID_USER_STATUS);
+        }
+    }
+
     public void updateUserAllInfo(long userId, String nickname, String phoneNumber, String status) {
         log.info("[UserService.updateUserAllInfo]");
 
-        // TODO: 회원 전체 정보 수정
+        // TODO: 1. validation
+        validateNickname(nickname);
+        validateStatus(status);
+
+        // TODO: 2. 회원 전체 정보 수정
         int affectedRows = userDao.updateUserAllInfo(userId, nickname, phoneNumber, status);
         if (affectedRows != 1) {
             throw new DatabaseException(DATABASE_ERROR);
