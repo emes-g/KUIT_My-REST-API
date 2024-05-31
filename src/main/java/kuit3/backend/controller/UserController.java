@@ -1,5 +1,6 @@
 package kuit3.backend.controller;
 
+import kuit3.backend.common.argument_resolver.PreAuthorize;
 import kuit3.backend.common.response.BaseResponse;
 import kuit3.backend.common.exception.UserException;
 import kuit3.backend.service.UserService;
@@ -45,7 +46,7 @@ public class UserController {
      * @return 예외 혹은 응답
      */
     @PatchMapping("/{userId}/nickname")
-    public BaseResponse<String> updateNickname(@PathVariable long userId,
+    public BaseResponse<String> updateNickname(@PreAuthorize long userId,
                                                @Validated @RequestBody PatchNicknameRequest patchNicknameRequest, BindingResult bindingResult) {
         log.info("[UserController.updateNickname]");
         if (bindingResult.hasErrors()) {
@@ -59,7 +60,7 @@ public class UserController {
      * 회원 핸드폰 번호 수정
      */
     @PatchMapping("/{userId}/phoneNumber")
-    public BaseResponse<String> updatePhoneNumber(@PathVariable long userId,
+    public BaseResponse<String> updatePhoneNumber(@PreAuthorize long userId,
                                                   @Validated @RequestBody PatchPhoneNumberRequest patchPhoneNumberRequest, BindingResult bindingResult) {
         log.info("[UserController.updatePhoneNumber]");
         if (bindingResult.hasErrors()) {
@@ -73,7 +74,7 @@ public class UserController {
      * 회원 상태 수정
      */
     @PatchMapping("/{userId}/status")
-    public BaseResponse<String> updateStatus(@PathVariable long userId,
+    public BaseResponse<String> updateStatus(@PreAuthorize long userId,
                                              @Validated @RequestBody PatchStatusRequest patchStatusRequest, BindingResult bindingResult) {
         log.info("[UserController.updateStatus]");
         if (bindingResult.hasErrors()) {
@@ -87,7 +88,7 @@ public class UserController {
      * 회원 전체 정보 수정
      */
     @PutMapping("/{userId}")
-    public BaseResponse<String> updateUserAllInfo(@PathVariable long userId,
+    public BaseResponse<String> updateUserAllInfo(@PreAuthorize long userId,
                                                   @Validated @RequestBody PostUserRequest postUserRequest, BindingResult bindingResult) {
         log.info("[UserController.updateUserAllInfo]");
         if (bindingResult.hasErrors()) {
@@ -110,7 +111,7 @@ public class UserController {
      * 해당 회원 조회
      */
     @GetMapping("/{userId}")
-    public BaseResponse<List<GetUserResponse>> getUserByUserId(@PathVariable long userId){
+    public BaseResponse<List<GetUserResponse>> getUserByUserId(@PreAuthorize long userId){
         log.info("[UserController.getUser");
         return new BaseResponse<>(userService.getUserByUserId(userId));
     }
