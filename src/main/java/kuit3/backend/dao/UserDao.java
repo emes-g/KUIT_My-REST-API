@@ -81,16 +81,31 @@ public class UserDao {
         return jdbcTemplate.update(sql, param);
     }
 
-    public List<GetUserResponse> getAllUsers() {
+    // 근데 이건 클라이언트에서 스크롤을 내리면,
+    // 다시 맨 처음으로 올라가서 limit 개수만큼 데이터가 추가된 화면을 보여주는 작업이 아닌지?
+    // 즉, 무한 스크롤을 구현하진 못한 것 같다.
+    public List<GetUserResponse> getAllUsers(long lastId) {
         log.info("[UserDao.getAllUsers]");
-        String sql = "select nickname, phone_number, status from user";
+        String sql = "select nickname, phone_number, status from user where id<=:last_id";
+        String appendedSql = "select nickname, phone_number, status from user where id>:last_id limit 5";
+        Map<String, Object> param = Map.of("last_id", lastId);
 
-        return jdbcTemplate.query(sql,
+        // lastId 이전 데이터는 살리면서
+        List<GetUserResponse> users = jdbcTemplate.query(sql, param,
+                (rs, rowNum) -> new GetUserResponse(
+                        rs.getString("nickname"),
+                        rs.getString("phone_number"),
+                        rs.getString("status")));
+
+        // lastId 초과인 데이터는 limit 크기만큼만 받아온다.
+        users.addAll(jdbcTemplate.query(appendedSql, param,
                 (rs, rowNum) -> new GetUserResponse(
                         rs.getString("nickname"),
                         rs.getString("phone_number"),
                         rs.getString("status"))
-        );
+        ));
+
+        return users;
     }
 
     public List<GetUserResponse> getUserByUserId(long userId) {

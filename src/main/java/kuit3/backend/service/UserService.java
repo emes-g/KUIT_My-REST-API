@@ -106,11 +106,11 @@ public class UserService {
         }
     }
 
-    public List<GetUserResponse> getAllUsers() {
+    public List<GetUserResponse> getAllUsers(long lastId) {
         log.info("[UserService.getAllUsers]");
 
         // TODO: 전체 회원 조회
-        return userDao.getAllUsers();
+        return userDao.getAllUsers(lastId);
     }
 
 

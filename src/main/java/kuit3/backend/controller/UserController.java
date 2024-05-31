@@ -102,9 +102,9 @@ public class UserController {
      * 전체 회원 조회
      */
     @GetMapping("")
-    public BaseResponse<List<GetUserResponse>> getAllUsers() {
+    public BaseResponse<List<GetUserResponse>> getAllUsers(@RequestParam(defaultValue = "0") long lastId) {
         log.info("[UserController.getAllUsers]");
-        return new BaseResponse<>(userService.getAllUsers());
+        return new BaseResponse<>(userService.getAllUsers(lastId));
     }
 
     /**
