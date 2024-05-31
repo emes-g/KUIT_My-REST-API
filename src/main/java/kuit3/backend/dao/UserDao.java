@@ -114,7 +114,7 @@ public class UserDao {
     }
 
     public long getUserIdByNickname(String nickname) {
-        String sql = "select user_id from user where nickname=:nickname and status='ACTIVE'";
+        String sql = "select id from user where nickname=:nickname and status='ACTIVE'";
         Map<String, Object> param = Map.of("nickname", nickname);
         return jdbcTemplate.queryForObject(sql, param, long.class);
     }
