@@ -3,6 +3,7 @@ package kuit3.backend.dao;
 import kuit3.backend.dto.user.GetUserResponse;
 import kuit3.backend.dto.user.PostUserRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Description;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -81,43 +82,38 @@ public class UserDao {
         return jdbcTemplate.update(sql, param);
     }
 
-    // 근데 이건 클라이언트에서 스크롤을 내리면,
-    // 다시 맨 처음으로 올라가서 limit 개수만큼 데이터가 추가된 화면을 보여주는 작업이 아닌지?
-    // 즉, 무한 스크롤을 구현하진 못한 것 같다.
+    @Description("오름차순 무한 스크롤")
     public List<GetUserResponse> getAllUsers(long lastId) {
         log.info("[UserDao.getAllUsers]");
-        String sql = "select nickname, phone_number, status from user where id<=:last_id";
-        String appendedSql = "select nickname, phone_number, status from user where id>:last_id limit 5";
+        String sql = "select nickname, phone_number, status, lpad(id, 10, '0') as 'cursor' " +
+                "from user " +
+                "where lpad(id, 10, '0') > lpad(:last_id, 10, '0')" +
+                "order by id asc " +
+                "limit 5";
         Map<String, Object> param = Map.of("last_id", lastId);
 
-        // lastId 이전 데이터는 살리면서
-        List<GetUserResponse> users = jdbcTemplate.query(sql, param,
+        return jdbcTemplate.query(sql, param,
                 (rs, rowNum) -> new GetUserResponse(
                         rs.getString("nickname"),
                         rs.getString("phone_number"),
-                        rs.getString("status")));
-
-        // lastId 초과인 데이터는 limit 크기만큼만 받아온다.
-        users.addAll(jdbcTemplate.query(appendedSql, param,
-                (rs, rowNum) -> new GetUserResponse(
-                        rs.getString("nickname"),
-                        rs.getString("phone_number"),
-                        rs.getString("status"))
-        ));
-
-        return users;
+                        rs.getString("status"),
+                        rs.getString("cursor")
+                )
+        );
     }
 
     public List<GetUserResponse> getUserByUserId(long userId) {
         log.info("[UserDao.getUserByUserId]");
         String sql = "select nickname, phone_number, status from user where id=:id";
         Map<String, Object> param = Map.of("id", userId);
-
+        
+        // 커서 관련하여 추후 수정 필요
         return jdbcTemplate.query(sql, param,
                 (rs, rowNum) -> new GetUserResponse(
                         rs.getString("nickname"),
                         rs.getString("phone_number"),
-                        rs.getString("status"))
+                        rs.getString("status"),
+                        rs.getString("cursor"))
         );
     }
 
